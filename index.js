@@ -20,7 +20,7 @@ routes.forEach((route, index) => {
 	fastify.route(route);
 });
 
-const MONGO_URI = 'mongodb+srv://dsalenko:DeAtHeR32@cluster0-xoxyn.mongodb.net/test?retryWrites=true&w=majority';
+const MONGO_URI = 'mongodb+srv://dsalenko:hC8fxXdbJqGQ2n1f@cluster0-xoxyn.mongodb.net/test?retryWrites=true&w=majority';
 if (!MONGO_URI) {
     throw new Error('You must provide a MongoLab URI');
 }
