@@ -4,6 +4,7 @@ const deliveryInfoController = require('../controllers/deliveryInfoController');
 const commentController = require('../controllers/commentController');
 const cartController = require('../controllers/cartController');
 const orderController = require('../controllers/orderController');
+const authController = require('../controllers/authController');
 
 const documentation = require('./documentation/productApi');
 
@@ -39,6 +40,13 @@ const routes = [
 	{
 		method: 'GET',
 		url: '/api/users',
+		preHandler: async (request, reply, next) => {
+			try {
+				await request.jwtVerify()
+			} catch (err) {
+				reply.send(err)
+			}
+		},
 		handler: userController.getUsers,
 	},
 	{
@@ -169,6 +177,13 @@ const routes = [
 		method: 'DELETE',
 		url: '/api/orders/:id',
 		handler: orderController.deleteOrder,
+	},
+
+	//Authentication
+	{
+		method: 'POST',
+		url: '/sign',
+		handler: authController.signUp,
 	}
 ];
 

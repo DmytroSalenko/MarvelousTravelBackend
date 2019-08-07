@@ -8,6 +8,10 @@ const fastify = require('fastify')({
 	logger: true
 });
 
+fastify.register(require('fastify-jwt'), {
+	secret: 'supersecret'
+});
+
 // Register Swagger
 fastify.register(require('fastify-swagger'), swagger.options);
 
@@ -15,6 +19,14 @@ fastify.register(require('fastify-swagger'), swagger.options);
 fastify.get('/', async (request, reply) => {
 	return { hello: 'world' }
 });
+
+// fastify.addHook("onRequest", async (request, reply) => {
+// 	try {
+// 		await request.jwtVerify()
+// 	} catch (err) {
+// 		reply.send(err)
+// 	}
+// });
 
 routes.forEach((route, index) => {
 	fastify.route(route);
