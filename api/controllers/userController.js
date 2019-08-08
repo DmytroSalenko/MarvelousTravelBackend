@@ -29,14 +29,25 @@ exports.getSingleUser = async (req, reply) => {
 // Add a new user
 exports.addUser = async (req, reply) => {
 	try {
-		let user = new User();
-		user.email = req.body.email;
-		user.password_hash = bcrypt.hashSync(req.body.password, 2);
-		return user.save();
+		let email = req.body.email;
+		let regex = /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/;
+		if (!email.match(regex)) {
+			reply.status(403).send({message: "Email is invalid"});
+		} else {
+			let existingUsers = await User.find({email: email});
+			if (existingUsers.length > 0) {
+				reply.status(403).send({message: "This user already exists"});
+			} else {
+				let user = new User();
+				user.email = email;
+				user.password_hash = bcrypt.hashSync(req.body.password, 2);
+				return user.save();
+			}
+		}
 	} catch (err) {
 		throw boom.boomify(err);
 	}
-}
+};
 
 // Update an existing user
 exports.updateUser = async (req, reply) => {
@@ -49,7 +60,7 @@ exports.updateUser = async (req, reply) => {
 	} catch (err) {
 		throw boom.boomify(err);
 	}
-}
+};
 
 // Delete a user
 exports.deleteUser = async (req, reply) => {

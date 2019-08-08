@@ -40,3 +40,5 @@ exports.authenticateRequest = async (req, reply, next) => {
 	}
 	next();
 };
+
+//TODO add logout function
