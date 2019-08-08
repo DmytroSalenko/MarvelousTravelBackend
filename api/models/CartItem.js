@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
+const ProductModel = require('./Product');
 
 const CartItemSchema = new mongoose.Schema({
-	//TODO add product schema here
-	product_id: String,
-	quantity: Number
+	quantity: Number,
+	product: ProductModel.schema
 });
 
 module.exports = mongoose.model('CartItems', CartItemSchema);

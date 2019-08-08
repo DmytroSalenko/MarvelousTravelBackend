@@ -12,7 +12,7 @@ exports.getProducts = async (req, reply) => {
 	} catch (err) {
 		throw boom.boomify(err);
 	}
-}
+};
 
 // Get single product by ID
 exports.getSingleProduct = async (req, reply) => {
@@ -23,7 +23,7 @@ exports.getSingleProduct = async (req, reply) => {
 	} catch (err) {
 		throw boom.boomify(err);
 	}
-}
+};
 
 // Add a new product
 exports.addProduct = async (req, reply) => {
@@ -33,7 +33,7 @@ exports.addProduct = async (req, reply) => {
 	} catch (err) {
 		throw boom.boomify(err);
 	}
-}
+};
 
 // Update an existing product
 exports.updateProduct = async (req, reply) => {
@@ -46,7 +46,7 @@ exports.updateProduct = async (req, reply) => {
 	} catch (err) {
 		throw boom.boomify(err);
 	}
-}
+};
 
 // Delete a product
 exports.deleteProduct = async (req, reply) => {
@@ -57,4 +57,4 @@ exports.deleteProduct = async (req, reply) => {
 	} catch (err) {
 		throw boom.boomify(err);
 	}
-}
+};

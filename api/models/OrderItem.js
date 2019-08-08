@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
+const ProductModel = require('./Product');
 
 const OrderItemSchema = new mongoose.Schema({
-	product_id: String,
+	product: ProductModel.schema,
 	quantity: Number
 });
 

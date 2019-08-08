@@ -3,6 +3,8 @@ const boom = require('boom');
 
 // Get Data Models
 const Order = require('../models/Order');
+const Cart = require('../models/Cart');
+const OrderItem = require('../models/OrderItem');
 
 // Get all order
 exports.getOrders = async (req, reply) => {
@@ -12,7 +14,7 @@ exports.getOrders = async (req, reply) => {
 	} catch (err) {
 		throw boom.boomify(err);
 	}
-}
+};
 
 // Get single order by ID
 exports.getSingleOrder = async (req, reply) => {
@@ -23,21 +25,43 @@ exports.getSingleOrder = async (req, reply) => {
 	} catch (err) {
 		throw boom.boomify(err);
 	}
-}
+};
 
 // Add a new order
 exports.addOrder = async (req, reply) => {
 	try {
-		const order = new Order(req.body);
-		return order.save();
+		const user_id = req.user;
+		let existingCarts = await Cart.find({user_id: user_id});
+		if (existingCarts.length === 0) {
+			return reply.status(403).send({message: "You dont have a cart"});
+		} else {
+			const cart = existingCarts[0];
+			let order = new Order();
+			order.user_id = user_id;
+			order.isPaid = true;
+			order.date = Date.now();
+
+			for (let cartItem of cart.cartItems) {
+				let orderItem = new OrderItem();
+				orderItem.quantity = cartItem.quantity;
+				orderItem.product = cartItem.product;
+
+				order.orderItems.push(orderItem);
+			}
+
+			const savedOrder = order.save();
+			const cartToDelete = await Cart.findByIdAndRemove(cart.id);
+			return savedOrder;
+		}
 	} catch (err) {
 		throw boom.boomify(err);
 	}
-}
+};
 
 // Update an existing order
 exports.updateOrder = async (req, reply) => {
 	try {
+		//TODO rework this method in the same way as addOrder
 		const id = req.params.id;
 		const order = req.body;
 		const { ...updateData } = order;
@@ -46,7 +70,7 @@ exports.updateOrder = async (req, reply) => {
 	} catch (err) {
 		throw boom.boomify(err);
 	}
-}
+};
 
 // Delete a order
 exports.deleteOrder = async (req, reply) => {
@@ -57,4 +81,4 @@ exports.deleteOrder = async (req, reply) => {
 	} catch (err) {
 		throw boom.boomify(err);
 	}
-}
+};

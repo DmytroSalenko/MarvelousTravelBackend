@@ -8,6 +8,12 @@ const fastify = require('fastify')({
 	logger: true
 });
 
+// Require the framework for working with sessions
+const fastifySession = require('fastify-session')
+const fastifyCookie = require('fastify-cookie')
+fastify.register(fastifyCookie)
+fastify.register(fastifySession, { secret: 'my long 32 digit secretsecretsecretsecretsecret' });
+
 fastify.register(require('fastify-jwt'), {
 	secret: 'supersecret'
 });

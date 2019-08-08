@@ -116,6 +116,7 @@ const routes = [
 	{
 		method: 'POST',
 		url: '/api/comments',
+		// preHandler: [authController.authenticateRequest, commentController.ensurePurchased],
 		preHandler: authController.authenticateRequest,
 		handler: commentController.addComment,
 		schema: documentation.addCommentSchema
@@ -136,11 +137,13 @@ const routes = [
 	{
 		method: 'GET',
 		url: '/api/carts',
+		preHandler: authController.authenticateRequest,
 		handler: cartController.getCarts,
 	},
 	{
 		method: 'GET',
 		url: '/api/carts/:id',
+		preHandler: authController.authenticateRequest,
 		handler: cartController.getSingleCart,
 	},
 	{
@@ -152,7 +155,7 @@ const routes = [
 	},
 	{
 		method: 'PUT',
-		url: '/api/carts/:id',
+		url: '/api/carts',
 		preHandler: authController.authenticateRequest,
 		handler: cartController.updateCart,
 	},
@@ -166,11 +169,13 @@ const routes = [
 	{
 		method: 'GET',
 		url: '/api/orders',
+		preHandler: authController.authenticateRequest,
 		handler: orderController.getOrders,
 	},
 	{
 		method: 'GET',
 		url: '/api/orders/:id',
+		preHandler: authController.authenticateRequest,
 		handler: orderController.getSingleOrder,
 	},
 	{

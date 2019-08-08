@@ -13,7 +13,7 @@ exports.getUsers = async (req, reply) => {
 	} catch (err) {
 		throw boom.boomify(err);
 	}
-}
+};
 
 // Get single user by ID
 exports.getSingleUser = async (req, reply) => {
@@ -24,7 +24,7 @@ exports.getSingleUser = async (req, reply) => {
 	} catch (err) {
 		throw boom.boomify(err);
 	}
-}
+};
 
 // Add a new user
 exports.addUser = async (req, reply) => {
