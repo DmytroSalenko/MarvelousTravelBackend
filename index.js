@@ -20,14 +20,6 @@ fastify.get('/', async (request, reply) => {
 	return { hello: 'world' }
 });
 
-// fastify.addHook("onRequest", async (request, reply) => {
-// 	try {
-// 		await request.jwtVerify()
-// 	} catch (err) {
-// 		reply.send(err)
-// 	}
-// });
-
 routes.forEach((route, index) => {
 	fastify.route(route);
 });
@@ -52,6 +44,7 @@ const start = async () => {
 	  	fastify.log.error(err);
 	  	process.exit(1);
 	}
-}
-start()
+};
+
+start();
 

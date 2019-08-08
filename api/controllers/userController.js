@@ -1,5 +1,6 @@
 // External Dependencies
 const boom = require('boom');
+const bcrypt = require('bcrypt');
 
 // Get Data Models
 const User = require('../models/User');
@@ -28,7 +29,9 @@ exports.getSingleUser = async (req, reply) => {
 // Add a new user
 exports.addUser = async (req, reply) => {
 	try {
-		const user = new User(req.body);
+		let user = new User();
+		user.email = req.body.email;
+		user.password_hash = bcrypt.hashSync(req.body.password, 2);
 		return user.save();
 	} catch (err) {
 		throw boom.boomify(err);
@@ -57,4 +60,4 @@ exports.deleteUser = async (req, reply) => {
 	} catch (err) {
 		throw boom.boomify(err);
 	}
-}
+};

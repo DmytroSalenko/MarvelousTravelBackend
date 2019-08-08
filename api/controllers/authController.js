@@ -20,7 +20,7 @@ exports.signUp = async (req, reply) => {
         const isMatch = bcrypt.compareSync(password, usersFound[0].password_hash);
 
         if (isMatch) {
-            return reply.jwtSign((req.body.email + req.body.password), function (err, token) {
+            return reply.jwtSign(usersFound[0].id, function (err, token) {
                 return reply.send(err || { 'token': token })
             });
         } else {
@@ -30,4 +30,13 @@ exports.signUp = async (req, reply) => {
     } catch (err) {
         throw boom.boomify(err);
     }
+};
+
+exports.authenticateRequest = async (req, reply, next) => {
+    try {
+		await req.jwtVerify()
+	} catch (err) {
+		reply.send(err)
+	}
+	next();
 };

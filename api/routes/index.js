@@ -23,35 +23,33 @@ const routes = [
 	{
 		method: 'POST',
 		url: '/api/products',
+		preHandler: authController.authenticateRequest,
 		handler: productController.addProduct,
 		schema: documentation.addProductSchema
 	},
 	{
 		method: 'PUT',
 		url: '/api/products/:id',
+		preHandler: authController.authenticateRequest,
 		handler: productController.updateProduct,
 	},
 	{
 		method: 'DELETE',
 		url: '/api/products/:id',
+		preHandler: authController.authenticateRequest,
 		handler: productController.deleteProduct,
 	},
 	// Users
 	{
 		method: 'GET',
 		url: '/api/users',
-		preHandler: async (request, reply, next) => {
-			try {
-				await request.jwtVerify()
-			} catch (err) {
-				reply.send(err)
-			}
-		},
+		preHandler: authController.authenticateRequest,
 		handler: userController.getUsers,
 	},
 	{
 		method: 'GET',
 		url: '/api/users/:id',
+		preHandler: authController.authenticateRequest,
 		handler: userController.getSingleUser,
 	},
 	{
@@ -63,38 +61,45 @@ const routes = [
 	{
 		method: 'PUT',
 		url: '/api/users/:id',
+		preHandler: authController.authenticateRequest,
 		handler: userController.updateUser,
 	},
 	{
 		method: 'DELETE',
 		url: '/api/users/:id',
+		preHandler: authController.authenticateRequest,
 		handler: userController.deleteUser,
 	},
 	// DeliveryInfos
 	{
 		method: 'GET',
 		url: '/api/deliveryinfos',
+		preHandler: authController.authenticateRequest,
 		handler: deliveryInfoController.getDeliveryInfos,
 	},
 	{
 		method: 'GET',
 		url: '/api/deliveryinfos/:id',
+		preHandler: authController.authenticateRequest,
 		handler: deliveryInfoController.getSingleDeliveryInfo,
 	},
 	{
 		method: 'POST',
 		url: '/api/deliveryinfos',
+		preHandler: authController.authenticateRequest,
 		handler: deliveryInfoController.addDeliveryInfo,
 		schema: documentation.addDeliveryInfoSchema
 	},
 	{
 		method: 'PUT',
 		url: '/api/deliveryinfos/:id',
+		preHandler: authController.authenticateRequest,
 		handler: deliveryInfoController.updateDeliveryInfo,
 	},
 	{
 		method: 'DELETE',
 		url: '/api/deliveryinfos/:id',
+		preHandler: authController.authenticateRequest,
 		handler: deliveryInfoController.deleteDeliveryInfo,
 	},
 	// Comments
@@ -111,17 +116,20 @@ const routes = [
 	{
 		method: 'POST',
 		url: '/api/comments',
+		preHandler: authController.authenticateRequest,
 		handler: commentController.addComment,
 		schema: documentation.addCommentSchema
 	},
 	{
 		method: 'PUT',
 		url: '/api/comments/:id',
+		preHandler: authController.authenticateRequest,
 		handler: commentController.updateComment,
 	},
 	{
 		method: 'DELETE',
 		url: '/api/comments/:id',
+		preHandler: authController.authenticateRequest,
 		handler: commentController.deleteComment,
 	},
 	// Carts
@@ -139,16 +147,19 @@ const routes = [
 		method: 'POST',
 		url: '/api/carts',
 		handler: cartController.addCart,
+		preHandler: authController.authenticateRequest,
 		schema: documentation.addCartSchema
 	},
 	{
 		method: 'PUT',
 		url: '/api/carts/:id',
+		preHandler: authController.authenticateRequest,
 		handler: cartController.updateCart,
 	},
 	{
 		method: 'DELETE',
 		url: '/api/carts/:id',
+		preHandler: authController.authenticateRequest,
 		handler: cartController.deleteCart,
 	},
 	// Orders
@@ -166,16 +177,19 @@ const routes = [
 		method: 'POST',
 		url: '/api/orders',
 		handler: orderController.addOrder,
+		preHandler: authController.authenticateRequest,
 		schema: documentation.addOrderSchema
 	},
 	{
 		method: 'PUT',
 		url: '/api/orders/:id',
+		preHandler: authController.authenticateRequest,
 		handler: orderController.updateOrder,
 	},
 	{
 		method: 'DELETE',
 		url: '/api/orders/:id',
+		preHandler: authController.authenticateRequest,
 		handler: orderController.deleteOrder,
 	},
 
