@@ -7,7 +7,8 @@ const Product = require('../models/Product');
 // Get all products
 exports.getProducts = async (req, reply) => {
 	try {
-		const products = await Product.find();
+		let products = await Product.find();
+		products.map(product => product.imagePath[0] = 'http://' + req.hostname + '/' + product.imagePath[0]);
 		return products;
 	} catch (err) {
 		throw boom.boomify(err);

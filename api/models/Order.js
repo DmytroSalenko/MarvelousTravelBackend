@@ -1,9 +1,10 @@
 const mongoose = require('mongoose');
 const OrderItemModel = require('./OrderItem');
+const DeliveryInfo = require('./DeliveryInfo');
 
 const OrderSchema = new mongoose.Schema({
-	user_id: String,
-	deliveryinfo_id: String,
+	userId: String,
+	deliveryInfo: DeliveryInfo.schema,
 	isPaid: Boolean,
 	date: String,
 	orderItems: [OrderItemModel.schema]

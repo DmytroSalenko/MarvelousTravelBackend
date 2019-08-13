@@ -4,6 +4,7 @@ const bcrypt = require('bcrypt');
 
 // Get Data Models
 const User = require('../models/User');
+const DeliveryInfo = require('../models/DeliveryInfo');
 
 // Get all users
 exports.getUsers = async (req, reply) => {
@@ -30,6 +31,7 @@ exports.getSingleUser = async (req, reply) => {
 exports.addUser = async (req, reply) => {
 	try {
 		let email = req.body.email;
+		let deliveryInfo = req.body.deliveryInfoId;
 		let regex = /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/;
 		if (!email.match(regex)) {
 			reply.status(403).send({message: "Email is invalid"});
@@ -40,10 +42,26 @@ exports.addUser = async (req, reply) => {
 			} else {
 				let user = new User();
 				user.email = email;
+				user.deliveryInfoId = deliveryInfo;
 				user.password_hash = bcrypt.hashSync(req.body.password, 2);
 				return user.save();
 			}
 		}
+	} catch (err) {
+		throw boom.boomify(err);
+	}
+};
+
+exports.getUserWithDeliveryInfo = async (req, reply) => {
+	try {
+		const userId = req.user;
+		const user = await User.findById(userId);
+		const deliveryId = user.deliveryInfoId;
+		const deliveryInfo = await DeliveryInfo.findById(deliveryId);
+
+		const userWithDelivery = { _id: user._id, email: user.email, deliveryInfoId: deliveryId, deliveryInfo: deliveryInfo };
+
+		reply.send(userWithDelivery);
 	} catch (err) {
 		throw boom.boomify(err);
 	}
@@ -68,6 +86,23 @@ exports.deleteUser = async (req, reply) => {
 		const id = req.params.id;
 		const user = await User.findByIdAndRemove(id);
 		return user;
+	} catch (err) {
+		throw boom.boomify(err);
+	}
+};
+
+//Change password
+exports.changePassword = async (req, reply) => {
+	try {
+		const oldPassword = req.body.oldPassword;
+		const newPassword = req.body.password;
+		const userId = req.user;
+		let user = await User.findById(userId);
+		const isMatch = bcrypt.compareSync(oldPassword, user.password_hash);
+		if (isMatch) {
+			user.password_hash = bcrypt.hashSync(newPassword, 2);
+			await User.findByIdAndUpdate(user._id, user);
+		}
 	} catch (err) {
 		throw boom.boomify(err);
 	}

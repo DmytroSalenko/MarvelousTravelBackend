@@ -5,7 +5,7 @@ const DeliveryInfoSchema = new mongoose.Schema({
 	addressLine: String,
 	city: String,
 	postalCode: String,
-	provice: String
+	province: String
 });
 
 module.exports = mongoose.model('DeliveryInfos', DeliveryInfoSchema);

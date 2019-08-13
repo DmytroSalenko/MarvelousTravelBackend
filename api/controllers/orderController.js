@@ -5,6 +5,8 @@ const boom = require('boom');
 const Order = require('../models/Order');
 const Cart = require('../models/Cart');
 const OrderItem = require('../models/OrderItem');
+const DeliveryInfo = require('../models/DeliveryInfo');
+const User =  require('../models/User');
 
 // Get all order
 exports.getOrders = async (req, reply) => {
@@ -31,13 +33,13 @@ exports.getSingleOrder = async (req, reply) => {
 exports.addOrder = async (req, reply) => {
 	try {
 		const user_id = req.user;
-		let existingCarts = await Cart.find({user_id: user_id});
+		let existingCarts = await Cart.find({userId: user_id});
 		if (existingCarts.length === 0) {
 			return reply.status(403).send({message: "You dont have a cart"});
 		} else {
 			const cart = existingCarts[0];
 			let order = new Order();
-			order.user_id = user_id;
+			order.userId = user_id;
 			order.isPaid = true;
 			order.date = Date.now();
 
@@ -49,8 +51,15 @@ exports.addOrder = async (req, reply) => {
 				order.orderItems.push(orderItem);
 			}
 
-			const savedOrder = order.save();
-			const cartToDelete = await Cart.findByIdAndRemove(cart.id);
+			const user = await User.findById(user_id);
+			const deliveryInfo = await DeliveryInfo.findById(user.deliveryInfoId);
+			order.deliveryInfo = deliveryInfo;
+
+			const savedOrder = await order.save();
+			cart.cartItems = [];
+			await Cart.findByIdAndUpdate(cart._id, cart);
+			// const cartToDelete = await Cart.findByIdAndRemove(cart.id);
+
 			return savedOrder;
 		}
 	} catch (err) {

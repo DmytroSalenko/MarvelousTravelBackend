@@ -26,19 +26,41 @@ exports.getSingleComment = async (req, reply) => {
 	}
 };
 
+// Get single comment by ID
+exports.getCommentsByProductId = async (req, reply) => {
+	try {
+		const id = req.params.product_id;
+		const comment = await Comment.find({'productId': id});
+		return comment;
+	} catch (err) {
+		throw boom.boomify(err);
+	}
+};
+
 // Add a new comment
 exports.addComment = async (req, reply) => {
 	try {
 		const user_id = req.user;
-		const product_id = req.body.product_id;
-		const ordersCreated = await Order.find({'user_id': user_id, 'orderItems.product._id': product_id});
-		if (ordersCreated.length === 0) {
-			reply.status(404).send({message: "You have to purchase this item first"});
-		} else {
-			let comment = new Comment(req.body);
-			comment.user_id = user_id;
-			return comment.save();
-		}
+		const product_id = req.body.productId;
+		//TODO uncomment this when frontend is ready
+
+		// const ordersCreated = await Order.find({'user_id': user_id, 'orderItems.product._id': product_id});
+		// if (ordersCreated.length === 0) {
+		// 	reply.status(404).send({message: "You have to purchase this item first"});
+		// } else {
+		// 	let comment = new Comment(req.body);
+		// 	comment.userId = user_id;
+		// 	return comment.save();
+		// }
+		const commentData = req.body;
+		let comment = new Comment();
+		comment.userId = user_id;
+		comment.userName = commentData.userName;
+		comment.productId = commentData.productId;
+		comment.rating = commentData.rating;
+		comment.description = commentData.description;
+		comment.date = commentData.date;
+		return comment.save();
 	} catch (err) {
 		throw boom.boomify(err);
 	}

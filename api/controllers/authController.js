@@ -10,6 +10,7 @@ exports.signUp = async (req, reply) => {
     try {
         const email = req.body.email;
         const password = req.body.password;
+
         const usersFound = await User.find({ email: email });
 
         if (usersFound.length > 1) {
@@ -21,7 +22,7 @@ exports.signUp = async (req, reply) => {
 
         if (isMatch) {
             return reply.jwtSign(usersFound[0].id, function (err, token) {
-                return reply.send(err || { 'token': token })
+                return reply.send(err || { 'access_token': token, 'token_type': 'Bearer' })
             });
         } else {
             reply.status(400).send({message: 'Invalid password'});
@@ -32,13 +33,12 @@ exports.signUp = async (req, reply) => {
     }
 };
 
-exports.authenticateRequest = async (req, reply, next) => {
+exports.authenticateRequest = async (req, reply) => {
     try {
 		await req.jwtVerify()
 	} catch (err) {
 		reply.send(err)
 	}
-	next();
 };
 
 //TODO add logout function

@@ -38,6 +38,7 @@ exports.addDeliveryInfo = async (req, reply) => {
 // Update an existing delivery info
 exports.updateDeliveryInfo = async (req, reply) => {
 	try {
+		//TODO fix it
 		const id = req.params.id;
 		const deliveryInfo = req.body;
 		const { ...updateData } = deliveryInfo;
@@ -46,7 +47,7 @@ exports.updateDeliveryInfo = async (req, reply) => {
 	} catch (err) {
 		throw boom.boomify(err);
 	}
-}
+};
 
 // Delete a delivery info
 exports.deleteDeliveryInfo = async (req, reply) => {

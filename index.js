@@ -8,6 +8,17 @@ const fastify = require('fastify')({
 	logger: true
 });
 
+fastify.register(require('fastify-formbody'));
+fastify.register(require('fastify-multipart'));
+
+const path = require('path');
+
+
+fastify.register(require('fastify-static'), {
+	root: path.join(__dirname + '/api/resources/', 'image'),
+});
+
+fastify.register(require('fastify-cors'));
 // Require the framework for working with sessions
 const fastifySession = require('fastify-session')
 const fastifyCookie = require('fastify-cookie')
