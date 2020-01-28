@@ -40,8 +40,8 @@ exports.addCity = async (req, reply) => {
 exports.updateCity = async (req, reply) => {
 	try {
 		const id = req.params.id;
-		const product = req.body;
-		const { ...updateData } = product;
+		const city = req.body;
+		const { ...updateData } = city;
 		const update = await City.findByIdAndUpdate(id, updateData, { new: true });
 		return update;
 	} catch (err) {

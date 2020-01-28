@@ -5,6 +5,7 @@ const commentController = require('../controllers/commentController');
 const cartController = require('../controllers/cartController');
 const orderController = require('../controllers/orderController');
 const authController = require('../controllers/authController');
+const countryController = require('../controllers/countryController')
 
 const documentation = require('./documentation/productApi');
 
@@ -38,6 +39,32 @@ const routes = [
 		url: '/api/cities/:id',
 		preHandler: authController.authenticateRequest,
 		handler: productController.deleteCity,
+	},
+	// Contries
+	{
+		method: 'GET',
+		url: '/api/countries',
+		handler: countryController.getCountries,
+	},
+	{
+		method: 'GET',
+		url: '/api/countries/:id',
+		handler: countryController.getSingleCountry,
+	},
+	{
+		method: 'POST',
+		url: '/api/countries',
+		handler: countryController.addCountry,
+	},
+	{
+		method: 'PUT',
+		url: '/api/countries/:id',
+		handler: countryController.updateCountry,
+	},
+	{
+		method: 'DELETE',
+		url: '/api/countries/:id',
+		handler: countryController.deleteCountry,
 	},
 	// Users
 	{
