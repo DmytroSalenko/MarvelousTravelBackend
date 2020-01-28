@@ -4,12 +4,16 @@ const boom = require('boom');
 // Get Data Models
 const Comment = require('../models/Comment');
 const Order = require('../models/Order');
+const DeliveryInfo = require('../models/DeliveryInfo');
+const User = require('../models/User');
 
 // Get all comments
 exports.getComments = async (req, reply) => {
 	try {
 		const comments = await Comment.find();
-		return comments;
+		return comments.sort(function(element) {
+			return new Date(element.date)
+		}).reverse();
 	} catch (err) {
 		throw boom.boomify(err);
 	}
@@ -52,15 +56,20 @@ exports.addComment = async (req, reply) => {
 		// 	comment.userId = user_id;
 		// 	return comment.save();
 		// }
+		const user = await User.findById(user_id);
+		const deliveryInfo = await DeliveryInfo.findById(user.deliveryInfoId);
+		const userName = deliveryInfo.userName;
+
 		const commentData = req.body;
 		let comment = new Comment();
 		comment.userId = user_id;
-		comment.userName = commentData.userName;
+		comment.userName = userName;
 		comment.productId = commentData.productId;
 		comment.rating = commentData.rating;
 		comment.description = commentData.description;
 		comment.date = commentData.date;
-		return comment.save();
+		const savedComment = await comment.save();
+		return JSON.stringify(savedComment);
 	} catch (err) {
 		throw boom.boomify(err);
 	}

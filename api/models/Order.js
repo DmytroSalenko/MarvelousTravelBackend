@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const OrderItemModel = require('./OrderItem');
+const OrderItemModel = require('./Country');
 const DeliveryInfo = require('./DeliveryInfo');
 
 const OrderSchema = new mongoose.Schema({

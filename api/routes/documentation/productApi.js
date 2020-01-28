@@ -52,7 +52,15 @@ exports.addUserSchema = {
     	properties: {
       		email: { type: 'string' },
       		password_hash: { type: 'string' },
-      		deliveryinfo_id: { type: 'string' }
+			first_name: {type: 'string'},
+			last_name: {type: 'string'},
+			create_at: {type: 'string'},
+			avatar_url: {type: 'string'},
+			about: {type: 'string'},
+			interests: {type: 'string'},
+			date_of_birth: {type: 'string'},
+			place_of_living: {type: 'string'},
+			pictures: {type: 'array', items: {type: 'string'}}
     	}
 	},
   	response: {
@@ -61,9 +69,17 @@ exports.addUserSchema = {
       		type: 'object',
       		properties: {
         		_id: { type: 'string' },
-        		email: { type: 'string' },
-      			password_hash: { type: 'string' },
-      			deliveryinfo_id: { type: 'string' },
+				email: { type: 'string' },
+				password_hash: { type: 'string' },
+				first_name: {type: 'string'},
+				last_name: {type: 'string'},
+				create_at: {type: 'string'},
+				avatar_url: {type: 'string'},
+				about: {type: 'string'},
+				interests: {type: 'string'},
+				date_of_birth: {type: 'string'},
+				place_of_living: {type: 'string'},
+				pictures: {type: 'array', items: {type: 'string'}},
         		__v: { type: 'number' }
       		}
     	}

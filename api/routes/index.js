@@ -1,4 +1,4 @@
-const productController = require('../controllers/productController');
+const productController = require('../controllers/cityController');
 const userController = require('../controllers/userController');
 const deliveryInfoController = require('../controllers/deliveryInfoController');
 const commentController = require('../controllers/commentController');
@@ -9,40 +9,35 @@ const authController = require('../controllers/authController');
 const documentation = require('./documentation/productApi');
 
 const routes = [
-	// Products
+	// Cities
 	{
 		method: 'GET',
-		url: '/api/products',
-		handler: productController.getProducts,
+		url: '/api/cities',
+		handler: productController.getCities,
 	},
 	{
 		method: 'GET',
-		url: '/api/products/:id',
-		handler: productController.getSingleProduct,
-	},
-	{
-		method: 'GET',
-		url: '/api/products/:product_id/comments',
-		handler: commentController.getCommentsByProductId,
+		url: '/api/cities/:id',
+		handler: productController.getSingleCity,
 	},
 	{
 		method: 'POST',
-		url: '/api/products',
+		url: '/api/cities',
 		// preHandler: authController.authenticateRequest,
-		handler: productController.addProduct,
+		handler: productController.addCity,
 		schema: documentation.addProductSchema
 	},
 	{
 		method: 'PUT',
-		url: '/api/products/:id',
+		url: '/api/cities/:id',
 		preHandler: authController.authenticateRequest,
-		handler: productController.updateProduct,
+		handler: productController.updateCity,
 	},
 	{
 		method: 'DELETE',
-		url: '/api/products/:id',
+		url: '/api/cities/:id',
 		preHandler: authController.authenticateRequest,
-		handler: productController.deleteProduct,
+		handler: productController.deleteCity,
 	},
 	// Users
 	{
@@ -56,12 +51,6 @@ const routes = [
 		url: '/api/users/:id',
 		preHandler: authController.authenticateRequest,
 		handler: userController.getSingleUser,
-	},
-	{
-		method: 'GET',
-		url: '/api/users/deliveryInfo',
-		preHandler: authController.authenticateRequest,
-		handler: userController.getUserWithDeliveryInfo
 	},
 	{
 		method: 'POST',

@@ -31,7 +31,8 @@ exports.getSingleUser = async (req, reply) => {
 exports.addUser = async (req, reply) => {
 	try {
 		let email = req.body.email;
-		let deliveryInfo = req.body.deliveryInfoId;
+		let first_name = req.body.first_name;
+		let last_name = req.body.last_name;
 		let regex = /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/;
 		if (!email.match(regex)) {
 			reply.status(403).send({message: "Email is invalid"});
@@ -42,26 +43,12 @@ exports.addUser = async (req, reply) => {
 			} else {
 				let user = new User();
 				user.email = email;
-				user.deliveryInfoId = deliveryInfo;
 				user.password_hash = bcrypt.hashSync(req.body.password, 2);
+				user.first_name = first_name;
+				user.last_name = last_name;
 				return user.save();
 			}
 		}
-	} catch (err) {
-		throw boom.boomify(err);
-	}
-};
-
-exports.getUserWithDeliveryInfo = async (req, reply) => {
-	try {
-		const userId = req.user;
-		const user = await User.findById(userId);
-		const deliveryId = user.deliveryInfoId;
-		const deliveryInfo = await DeliveryInfo.findById(deliveryId);
-
-		const userWithDelivery = { _id: user._id, email: user.email, deliveryInfoId: deliveryId, deliveryInfo: deliveryInfo };
-
-		reply.send(userWithDelivery);
 	} catch (err) {
 		throw boom.boomify(err);
 	}
@@ -102,6 +89,8 @@ exports.changePassword = async (req, reply) => {
 		if (isMatch) {
 			user.password_hash = bcrypt.hashSync(newPassword, 2);
 			await User.findByIdAndUpdate(user._id, user);
+		} else {
+			throw new Error();
 		}
 	} catch (err) {
 		throw boom.boomify(err);

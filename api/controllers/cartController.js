@@ -4,7 +4,7 @@ const boom = require('boom');
 // Get Data Models
 const Cart = require('../models/Cart');
 const CartItem = require('../models/CartItem');
-const Product = require('../models/Product');
+const Product = require('../models/City');
 
 // Get all cart
 exports.getCarts = async (req, reply) => {

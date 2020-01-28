@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const ProductModel = require('./Product');
+const ProductModel = require('./City');
 
 const CartItemSchema = new mongoose.Schema({
 	quantity: Number,
