@@ -13,7 +13,10 @@ const UserSchema = new mongoose.Schema({
 	interests: String,
 	date_of_birth: Date,
 	place_of_living: CityModel.schema,
-	images_path: [{type: String}]
+	images_path: [{type: String}],
+	trips: [
+		{type: mongoose.Schema.Types.ObjectId, ref: 'Trips'}
+	]
 });
 
 module.exports = mongoose.model('Users', UserSchema);
