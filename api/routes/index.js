@@ -7,10 +7,57 @@ const orderController = require('../controllers/orderController');
 const authController = require('../controllers/authController');
 const countryController = require('../controllers/countryController');
 const sightsController = require('../controllers/sightsController');
+const chatController = require('../controllers/chatController');
+const chatMessageController = require('../controllers/chatMessageController');
+const tripController = require('../controllers/tripController');
 
 const documentation = require('./documentation/productApi');
 
 const routes = [
+	// trips
+	{
+		method: 'POST',
+		url: '/api/trips',
+		handler: tripController.createTrip,
+	},
+	{
+		method: 'DELETE',
+		url: '/api/trips',
+		handler: tripController.deleteTrip,
+
+	},
+	{
+		method: 'PUT',
+		url: '/api/trips/:tripId',
+		handler: tripController.updateTrip,
+	},
+	{
+		method: 'GET',
+		url: '/api/trips/:tripId',
+		handler: tripController.getSingleTrip,
+	},
+	{
+		method: 'GET',
+		url: '/api/trips',
+		handler: tripController.getTrips,
+	},
+	// chats message
+	{
+		method: 'POST',
+		url: '/api/chatMessages',
+		handler: chatMessageController.addMessage,
+	},
+	{
+		method: 'GET',
+		url: '/api/chatMessages',
+		handler: chatMessageController.getChatMessages,
+	},
+	// chat
+	{
+		method: 'GET',
+		url: '/api/chats',
+		handler: chatController.getSingleChat,
+	},
 	// Cities
 	{
 		method: 'GET',
