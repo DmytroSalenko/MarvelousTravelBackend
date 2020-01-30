@@ -3,8 +3,9 @@ const boom = require('boom');
 
 // Get Data Models
 const City = require('../models/City');
+const Country = require('../models/Country')
 
-// Get all products
+// Get all cities
 exports.getCities = async (req, reply) => {
 	try {
 		let city = await City.find();
@@ -15,7 +16,7 @@ exports.getCities = async (req, reply) => {
 	}
 };
 
-// Get single product by ID
+// Get single city by ID
 exports.getSingleCity = async (req, reply) => {
 	try {
 		const id = req.params.id;
@@ -26,17 +27,20 @@ exports.getSingleCity = async (req, reply) => {
 	}
 };
 
-// Add a new product
+// Add a new city
 exports.addCity = async (req, reply) => {
 	try {
-		const city = new City(req.body);
+		let request = req.body;
+		const country_name = req.body.country;
+		request.country = await Country.findOne({'name':country_name});
+		let city = new City(request);
 		return city.save();
 	} catch (err) {
 		throw boom.boomify(err);
 	}
 };
 
-// Update an existing product
+// Update an existing city
 exports.updateCity = async (req, reply) => {
 	try {
 		const id = req.params.id;
@@ -49,7 +53,7 @@ exports.updateCity = async (req, reply) => {
 	}
 };
 
-// Delete a product
+// Delete a city
 exports.deleteCity = async (req, reply) => {
 	try {
 		const id = req.params.id;

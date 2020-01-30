@@ -5,7 +5,8 @@ const commentController = require('../controllers/commentController');
 const cartController = require('../controllers/cartController');
 const orderController = require('../controllers/orderController');
 const authController = require('../controllers/authController');
-const countryController = require('../controllers/countryController')
+const countryController = require('../controllers/countryController');
+const sightsController = require('../controllers/sightsController');
 
 const documentation = require('./documentation/productApi');
 
@@ -65,6 +66,36 @@ const routes = [
 		method: 'DELETE',
 		url: '/api/countries/:id',
 		handler: countryController.deleteCountry,
+	},
+	//Sights
+	{
+		method: 'GET',
+		url: '/api/sights',
+		handler: sightsController.getSights,
+	},
+	{
+		method: 'GET',
+		url: '/api/sights/:id',
+		handler: sightsController.getSingleSight,
+	},
+	{
+		method: 'POST',
+		url: '/api/sights',
+		// preHandler: authController.authenticateRequest,
+		handler: sightsController.addSight,
+		schema: documentation.addProductSchema
+	},
+	{
+		method: 'PUT',
+		url: '/api/sights/:id',
+		preHandler: authController.authenticateRequest,
+		handler: sightsController.updateSight,
+	},
+	{
+		method: 'DELETE',
+		url: '/api/sights/:id',
+		preHandler: authController.authenticateRequest,
+		handler: sightsController.deleteSight,
 	},
 	// Users
 	{
