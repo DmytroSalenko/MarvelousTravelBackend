@@ -16,6 +16,9 @@ const UserSchema = new mongoose.Schema({
 	images_path: [{type: String}],
 	trips: [
 		{type: mongoose.Schema.Types.ObjectId, ref: 'Trips'}
+	],
+	chats: [
+		{type: mongoose.Schema.Types.ObjectId, ref: 'Chats'}
 	]
 });
 

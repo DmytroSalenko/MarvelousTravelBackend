@@ -4,7 +4,9 @@ const ChatMessage = require('../models/ChatMessage');
 
 const ChatSchema = new mongoose.Schema({
     tripId: String,
-    chatMessages: {type: mongoose.Schema.Types.ObjectId, ref:'ChatMessage'}
+    name: String,
+    picture_url: String,
+    chatMessages: [{type: mongoose.Schema.Types.ObjectId, ref:'ChatMessages'}]
 });
 
 module.exports = mongoose.model('Chats', ChatSchema);

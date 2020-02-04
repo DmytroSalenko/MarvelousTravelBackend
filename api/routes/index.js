@@ -16,6 +16,11 @@ const documentation = require('./documentation/productApi');
 const routes = [
 	// trips
 	{
+		method: 'GET',
+		url: '/api/user.trips/:id',
+		handler: tripController.getUserTrips,
+	},
+	{
 		method: 'POST',
 		url: '/api/trips',
 		handler: tripController.createTrip,
@@ -24,7 +29,6 @@ const routes = [
 		method: 'DELETE',
 		url: '/api/trips',
 		handler: tripController.deleteTrip,
-
 	},
 	{
 		method: 'PUT',
@@ -41,22 +45,32 @@ const routes = [
 		url: '/api/trips',
 		handler: tripController.getTrips,
 	},
+	{
+		method: 'POST',
+		url: '/api/follow.trips/:tripId',
+		handler: tripController.followTrip,
+	},
+	{
+		method: 'POST',
+		url: '/api/unfollow.trips/:userId',
+		handler: tripController.unfollowTrip,
+	},
 	// chats message
 	{
 		method: 'POST',
 		url: '/api/chatMessages',
 		handler: chatMessageController.addMessage,
 	},
-	{
-		method: 'GET',
-		url: '/api/chatMessages',
-		handler: chatMessageController.getChatMessages,
-	},
 	// chat
 	{
 		method: 'GET',
-		url: '/api/chats',
+		url: '/api/chats/:id',
 		handler: chatController.getSingleChat,
+	},
+	{
+		method: "GET",
+		url: '/api/user.chats/:id',
+		handler: chatController.getUserChats,
 	},
 	// Cities
 	{
