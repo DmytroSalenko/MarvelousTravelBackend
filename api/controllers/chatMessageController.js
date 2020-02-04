@@ -14,18 +14,19 @@ exports.addMessage = async (req, reply) => {
         console.log(req.body, "This is my body");
         const user = await User.findById(user_id);
         const chat = await Chat.findById(chat_id);
-        /*if (user.length === null || chat.length === null){
-            reply.status(404).send({message: 'User or chat was not found'})
-        }else {*/
-            const messageData = req.body;
-            let message = new ChatMessage();
-            message.userId = user_id;
-            message.messageBody = messageData.messageBody;
-            message.date = messageData.date;
-            message.chatId = chat_id;
-            const savedMessage = await message.save();
+        const messageData = req.body;
+        let message = new ChatMessage();
+        message.userId = user_id;
+        message.messageBody = messageData.messageBody;
+        message.date = messageData.date;
+        message.chatId = chat_id;
+        const savedMessage = await message.save();
+        console.log(message, "this is my message");
+        // save chat message into an array
+        chat.chatMessages.push(message);
+        await chat.save();
 
-            return JSON.stringify(savedMessage);
+        return JSON.stringify(savedMessage);
        // }
 
     } catch (err) {
@@ -34,14 +35,14 @@ exports.addMessage = async (req, reply) => {
 };
 
 // TODO: fix this method to get all messages related to chat
-// Get all messages for specific chat
-exports.getChatMessages = async (req, reply) => {
-    try {
-        const chat_id = req.body.chatId;
-        console.log(req.body, "This is chat id");
-        const messages = await ChatMessage.find({}).where('tripId').equals(chat_id);
-        return messages;
-    } catch (err) {
-        throw boom.boomify(err);
-    }
-};
+// // Get all messages for specific chat
+// exports.getChatMessages = async (req, reply) => {
+//     try {
+//         const chat_id = req.body.chatId;
+//         console.log(req.body, "This is chat id");
+//         const messages = await ChatMessage.find({}).where('tripId').equals(chat_id);
+//         return messages;
+//     } catch (err) {
+//         throw boom.boomify(err);
+//     }
+// };
