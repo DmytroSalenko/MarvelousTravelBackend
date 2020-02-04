@@ -33,16 +33,3 @@ exports.addMessage = async (req, reply) => {
         throw boom.boomify(err);
     }
 };
-
-// TODO: fix this method to get all messages related to chat
-// // Get all messages for specific chat
-// exports.getChatMessages = async (req, reply) => {
-//     try {
-//         const chat_id = req.body.chatId;
-//         console.log(req.body, "This is chat id");
-//         const messages = await ChatMessage.find({}).where('tripId').equals(chat_id);
-//         return messages;
-//     } catch (err) {
-//         throw boom.boomify(err);
-//     }
-// };
