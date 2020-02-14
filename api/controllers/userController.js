@@ -10,7 +10,7 @@ const DeliveryInfo = require('../models/DeliveryInfo');
 exports.getUsers = async (req, reply) => {
 	try {
 		const users = await User.find();
-		return users;
+		reply.send(users);
 	} catch (err) {
 		throw boom.boomify(err);
 	}
@@ -21,7 +21,7 @@ exports.getSingleUser = async (req, reply) => {
 	try {
 		const id = req.params.id;
 		const user = await User.findById(id);
-		return user;
+		reply.send(user);
 	} catch (err) {
 		throw boom.boomify(err);
 	}
@@ -46,7 +46,7 @@ exports.addUser = async (req, reply) => {
 				user.password_hash = bcrypt.hashSync(req.body.password, 2);
 				user.first_name = first_name;
 				user.last_name = last_name;
-				return user.save();
+				reply.send(user.save());
 			}
 		}
 	} catch (err) {
@@ -61,7 +61,7 @@ exports.updateUser = async (req, reply) => {
 		const user = req.body;
 		const { ...updateData } = user;
 		const update = await User.findByIdAndUpdate(id, updateData, { new: true });
-		return update;
+		reply.send(update);
 	} catch (err) {
 		throw boom.boomify(err);
 	}
@@ -72,13 +72,13 @@ exports.deleteUser = async (req, reply) => {
 	try {
 		const id = req.params.id;
 		const user = await User.findByIdAndRemove(id);
-		return user;
+		reply.send(user);
 	} catch (err) {
 		throw boom.boomify(err);
 	}
 };
 
-//Change password
+//Change password TODO maybe delete it or rework finally
 exports.changePassword = async (req, reply) => {
 	try {
 		const oldPassword = req.body.oldPassword;

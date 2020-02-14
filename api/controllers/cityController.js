@@ -10,7 +10,7 @@ exports.getCities = async (req, reply) => {
 	try {
 		let city = await City.find();
 		// city.map(city => city.imagePath[0] = 'http://' + req.hostname + '/' + city.imagePath[0]);
-		return city;
+		reply.send(city);
 	} catch (err) {
 		throw boom.boomify(err);
 	}
@@ -21,7 +21,7 @@ exports.getSingleCity = async (req, reply) => {
 	try {
 		const id = req.params.id;
 		const city = await City.findById(id);
-		return city;
+		reply.send(city);
 	} catch (err) {
 		throw boom.boomify(err);
 	}
@@ -34,7 +34,7 @@ exports.addCity = async (req, reply) => {
 		const country_name = req.body.country;
 		request.country = await Country.findOne({'name':country_name});
 		let city = new City(request);
-		return city.save();
+		reply.send(city.save());
 	} catch (err) {
 		throw boom.boomify(err);
 	}
@@ -47,7 +47,7 @@ exports.updateCity = async (req, reply) => {
 		const city = req.body;
 		const { ...updateData } = city;
 		const update = await City.findByIdAndUpdate(id, updateData, { new: true });
-		return update;
+		reply.send(update);
 	} catch (err) {
 		throw boom.boomify(err);
 	}
@@ -58,7 +58,7 @@ exports.deleteCity = async (req, reply) => {
 	try {
 		const id = req.params.id;
 		const city = await City.findByIdAndRemove(id);
-		return city;
+		reply.send(city);
 	} catch (err) {
 		throw boom.boomify(err);
 	}

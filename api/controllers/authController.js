@@ -1,12 +1,13 @@
 // External Dependencies
 const boom = require('boom');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 // Get Data Models
 const User = require('../models/User');
 
 
-exports.signUp = async (req, reply) => {
+exports.signIn = async (req, reply) => {
     try {
         const email = req.body.email;
         const password = req.body.password;
@@ -21,9 +22,8 @@ exports.signUp = async (req, reply) => {
         const isMatch = bcrypt.compareSync(password, usersFound[0].password_hash);
 
         if (isMatch) {
-            return reply.jwtSign(usersFound[0].id, function (err, token) {
-                return reply.send(err || { 'access_token': token, 'token_type': 'Bearer' })
-            });
+            let token = jwt.sign({email: password}, 'hui konya');
+            reply.send({ 'access_token': token, 'token_type': 'Bearer' })
         } else {
             reply.status(400).send({message: 'Invalid password'});
         }
@@ -33,9 +33,9 @@ exports.signUp = async (req, reply) => {
     }
 };
 
-exports.authenticateRequest = async (req, reply) => {
+exports.authorizeRequest = async (req, reply) => {
     try {
-		await req.jwtVerify()
+		await jwt.verify(req.headers.authorization, 'hui konya');
 	} catch (err) {
 		reply.send(err)
 	}

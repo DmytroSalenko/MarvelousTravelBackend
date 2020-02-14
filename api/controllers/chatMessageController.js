@@ -26,7 +26,7 @@ exports.addMessage = async (req, reply) => {
         chat.chatMessages.push(message);
         await chat.save();
 
-        return JSON.stringify(savedMessage);
+        reply.send(JSON.stringify(savedMessage));
        // }
 
     } catch (err) {

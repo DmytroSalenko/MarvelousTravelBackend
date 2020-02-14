@@ -37,7 +37,8 @@ exports.createTrip = async (req, reply) => {
             user.chats.push(chat);
             await user.save();
 
-            return JSON.stringify(savedTrip) + JSON.stringify(savedChat);
+            // return JSON.stringify(savedTrip) + JSON.stringify(savedChat);
+            reply.send(JSON.stringify(savedTrip));
         }
 
     } catch (err) {
@@ -59,7 +60,7 @@ exports.deleteTrip = async (req, reply) => {
         user.chats.pull(chatId);
         await user.save();
 
-        return trip + chat;
+        reply.send(trip + chat);
     }catch (err) {
         throw boom.boomify(err);
     }
@@ -74,7 +75,7 @@ exports.updateTrip = async (req, reply) => {
         console.log(updatedData);
         const { ...updateData } = updatedData;
         const update = await Trip.findByIdAndUpdate(tripId, updateData, { new: true });
-        return update;
+        reply.send(update);
 
     }catch (err) {
         throw boom.boomify(err);
@@ -87,7 +88,7 @@ exports.getSingleTrip = async (req, reply) => {
         const id = req.params.tripId;
         const trip = await Trip.findById(id);
         console.log(trip, "this is my trip");
-        return trip;
+        reply.send(trip);
     } catch (err) {
         throw boom.boomify(err);
     }
@@ -97,7 +98,7 @@ exports.getSingleTrip = async (req, reply) => {
 exports.getTrips = async (req, reply) => {
     try {
         const trips = await Trip.find();
-        return trips;
+        reply.send(trips);
     } catch (err) {
         throw boom.boomify(err);
     }
@@ -108,7 +109,7 @@ exports.getUserTrips = async (req, reply) => {
     try {
         const id = req.params.id;
         const trips = await User.findById(id).populate('trips');
-        return trips;
+        reply.send(trips);
     } catch (err) {
         throw boom.boomify(err);
     }
@@ -125,7 +126,7 @@ exports.followTrip = async (req, reply) => {
         user.trips.push(trip);
         user.chats.push(chat);
         await user.save();
-        return user;
+        reply.send(user);
   } catch(err) {
       throw boom.boomify(err);
   }
@@ -141,7 +142,7 @@ exports.unfollowTrip = async (req, reply) => {
         user.trips.pull(tripId);
         user.chats.pull(chatId);
         await user.save();
-        return user;
+        reply.send(user);
     }catch(err) {
         throw boom.boomify(err);
     }

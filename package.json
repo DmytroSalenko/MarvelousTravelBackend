@@ -19,6 +19,7 @@
     "fastify-session": "^3.0.0",
     "fastify-static": "^2.5.0",
     "fastify-swagger": "^2.3.2",
+    "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.5.1",
     "nodemon": "^1.18.11",
     "server": "^1.0.19"

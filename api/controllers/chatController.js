@@ -13,7 +13,7 @@ exports.getSingleChat = async (req, reply) => {
         const chat = await Chat.findById(id);
         // return messages related to chat
         const messages = await Chat.findById(id).populate('chatMessages');
-        return messages;
+        reply.send(messages);
     }catch (err) {
         throw boom.boomify(err);
     }
@@ -26,7 +26,7 @@ exports.getUserChats = async (req, reply) => {
         console.log(id, 'This is id');
         // const user = await User.findById(id);
         const chats = await User.findById(id).populate('chats');
-        return chats;
+        reply.send(chats);
     }catch(err) {
         throw boom.boomify(err);
     }

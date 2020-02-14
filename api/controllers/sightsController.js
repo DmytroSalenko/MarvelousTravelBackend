@@ -23,7 +23,7 @@ exports.getSingleSight = async (req, reply) => {
     try {
         const id = req.params.id;
         const sight = await Sight.findById(id);
-        return sight;
+        reply.send(sight);
     } catch (err) {
         throw boom.boomify(err);
     }
@@ -36,7 +36,7 @@ exports.addSight = async (req, reply) => {
         const city_name = req.body.city;
         request.city = await City.findOne({'name':city_name});
         let sight = new Sight(request);
-        return sight.save();
+        reply.send(sight.save());
     } catch (err) {
         throw boom.boomify(err);
     }
@@ -49,7 +49,7 @@ exports.updateSight = async (req, reply) => {
         const sight = req.body;
         const { ...updateData } = sight;
         const update = await Sight.findByIdAndUpdate(id, updateData, { new: true });
-        return update;
+        reply.send(update);
     } catch (err) {
         throw boom.boomify(err);
     }
@@ -60,7 +60,7 @@ exports.deleteSight = async (req, reply) => {
     try {
         const id = req.params.id;
         const sight = await Sight.findByIdAndRemove(id);
-        return sight;
+        reply.send(sight);
     } catch (err) {
         throw boom.boomify(err);
     }

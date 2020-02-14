@@ -7,7 +7,7 @@ const Country = require('../models/Country');
 exports.getCountries = async (req, reply) => {
     try {
         let countries = await Country.find();
-        return countries;
+        reply.send(countries);
     } catch (err) {
         throw boom.boomify(err);
     }
@@ -18,7 +18,7 @@ exports.getSingleCountry = async (req, reply) => {
     try {
         const id = req.params.id;
         const country = await Country.findById(id);
-        return country;
+        reply.send(country);
     } catch (err) {
         throw boom.boomify(err);
     }
@@ -28,7 +28,7 @@ exports.getSingleCountry = async (req, reply) => {
 exports.addCountry = async (req, reply) => {
     try {
         const country = new Country(req.body);
-        return country.save();
+        reply.send(country.save());
     } catch (err) {
         throw boom.boomify(err);
     }
@@ -41,7 +41,7 @@ exports.updateCountry = async (req, reply) => {
         const country = req.body;
         const { ...updateData } = country;
         const update = await Country.findByIdAndUpdate(id, updateData, { new: true });
-        return update;
+        reply.send(update);
     } catch (err) {
         throw boom.boomify(err);
     }
@@ -52,7 +52,7 @@ exports.deleteCountry = async (req, reply) => {
     try {
         const id = req.params.id;
         const country = await Country.findByIdAndRemove(id);
-        return country;
+        reply.send(country);
     } catch (err) {
         throw boom.boomify(err);
     }
