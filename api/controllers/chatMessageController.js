@@ -7,11 +7,10 @@ const ChatMessage = require('../models/ChatMessage');
 const User = require('../models/User');
 
 // Add a new message
-exports.addMessage = async (req, reply) => {
+exports.addMessage = async (req, reply, io) => {
     try {
         const user_id = req.body.userId;
         const chat_id = req.body.chatId;
-        console.log(req.body, "This is my body");
         const user = await User.findById(user_id);
         const chat = await Chat.findById(chat_id);
         const messageData = req.body;
@@ -25,9 +24,10 @@ exports.addMessage = async (req, reply) => {
         // save chat message into an array
         chat.chatMessages.push(message);
         await chat.save();
-
         reply.send(JSON.stringify(savedMessage));
-       // }
+
+        io.emit('newChatMessage', savedMessage);
+
 
     } catch (err) {
         throw boom.boomify(err);

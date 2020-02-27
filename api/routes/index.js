@@ -8,7 +8,7 @@ const authController = require('../controllers/authController');
 const countryController = require('../controllers/countryController');
 const sightsController = require('../controllers/sightsController');
 const chatController = require('../controllers/chatController');
-const chatMessageController = require('../controllers/chatMessageController');
+//const chatMessageController = require('../controllers/chatMessageController');
 const tripController = require('../controllers/tripController');
 
 const documentation = require('./documentation/productApi');
@@ -354,7 +354,8 @@ const routes = [
 
 // module.exports = routes;
 
-function set_routes(app) {
+function set_routes(app, io) {
+	const chatMessageController = require('../controllers/chatMessageController');
 	// trips
 	app.get('/api/user/trips/:id', tripController.getUserTrips);
 	app.post('/api/trips', tripController.createTrip);
@@ -366,7 +367,10 @@ function set_routes(app) {
 	app.post('/api/unfollow/trips/:userId', tripController.unfollowTrip);
 
 	// chat messages
-	app.post('/api/chatMessages', chatMessageController.addMessage);
+	//app.post('/api/chatMessages', chatMessageController.addMessage);
+	app.post('/api/chatMessages', function (req, resp){
+		chatMessageController.addMessage(req, resp, io);
+	});
 	app.get('/api/chats/:id', chatController.getSingleChat);
 	app.get('/api/user/chats/:id', chatController.getUserChats);
 

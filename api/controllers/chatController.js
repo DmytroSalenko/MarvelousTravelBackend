@@ -14,6 +14,7 @@ exports.getSingleChat = async (req, reply) => {
         // return messages related to chat
         const messages = await Chat.findById(id).populate('chatMessages');
         reply.send(messages);
+
     }catch (err) {
         throw boom.boomify(err);
     }
