@@ -16,20 +16,32 @@ exports.signIn = async (req, reply) => {
 
         if (usersFound.length > 1) {
             reply.status(403).send({message: 'Multiple users found'});
+            return;
         } else if (usersFound.length === 0) {
             reply.status(404).send({message: 'No users found'});
+            return;
         }
         const isMatch = bcrypt.compareSync(password, usersFound[0].password_hash);
 
         if (isMatch) {
             let token = jwt.sign({email: password}, 'hui konya');
-            reply.send({ 'access_token': token, 'token_type': 'Bearer' })
+            reply.send({ 'access_token': token, 'token_type': 'Bearer' });
         } else {
             reply.status(400).send({message: 'Invalid password'});
         }
 
     } catch (err) {
         throw boom.boomify(err);
+    }
+};
+
+exports.checkEmailAvailability = async (req, reply) => {
+    const email = req.body.email;
+    const usersFound = await User.find({ email: email });
+    if (usersFound.length > 0) {
+        reply.status(403).send();
+    } else {
+        reply.status(200).send();
     }
 };
 

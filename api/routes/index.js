@@ -10,6 +10,7 @@ const sightsController = require('../controllers/sightsController');
 const chatController = require('../controllers/chatController');
 //const chatMessageController = require('../controllers/chatMessageController');
 const tripController = require('../controllers/tripController');
+const imagesController = require('../controllers/imagesController');
 
 const documentation = require('./documentation/productApi');
 
@@ -354,7 +355,7 @@ const routes = [
 
 // module.exports = routes;
 
-function set_routes(app, io) {
+function set_routes(app, upload, io) {
 	const chatMessageController = require('../controllers/chatMessageController');
 	// trips
 	app.get('/api/user/trips/:id', tripController.getUserTrips);
@@ -403,7 +404,13 @@ function set_routes(app, io) {
 	app.delete('/api/users/:id', userController.deleteUser); // auth
 
 	// authentication
+	app.post('/api/check_email', authController.checkEmailAvailability);
 	app.post('/api/sign', authController.signIn);
+
+	// images
+	app.post('/api/upload/icon/:id', upload.single("file"), imagesController.uploadProfileIcon);
+	app.get('/api/users/icon/:id', imagesController.getProfileIcon);
+	app.get('/api/users/mini/icon/:id', imagesController.getProfileMiniIcon);
 }
 
 module.exports = set_routes;

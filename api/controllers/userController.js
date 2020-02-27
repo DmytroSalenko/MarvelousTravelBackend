@@ -46,7 +46,8 @@ exports.addUser = async (req, reply) => {
 				user.password_hash = bcrypt.hashSync(req.body.password, 2);
 				user.first_name = first_name;
 				user.last_name = last_name;
-				reply.send(user.save());
+				const saved_user = await user.save();
+				reply.send(saved_user);
 			}
 		}
 	} catch (err) {
