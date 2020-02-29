@@ -3,8 +3,10 @@ const CountryModel = require('./Country');
 
 
 const CitySchema = new mongoose.Schema({
-	name: String,
-	country: CountryModel.schema,
+	city_name: String,
+	country_name: String,
+	city_id: String,
+	country_id: String,
 	latitude: Number,
 	longitude: Number,
 	image_path: [{
