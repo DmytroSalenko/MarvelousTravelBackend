@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const UserModel = require('./User');
-const UserModel = require('./City');
+const CityModel = require('./City');
 
 const TripSchema = new mongoose.Schema({
     name: String,
@@ -9,7 +9,7 @@ const TripSchema = new mongoose.Schema({
     trip_end_date: String,
     picture_url: String,
     destinations: [{
-        city: mongoose.Schema.Types.ObjectId, ref:'City', start_date: String, end_date: String
+        city: CityModel.schema, start_date: String, end_date: String
     }],
     users: {type: mongoose.Schema.Types.ObjectId, ref:'Users'}
 });

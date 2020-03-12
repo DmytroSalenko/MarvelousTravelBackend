@@ -17,10 +17,16 @@ exports.createTrip = async (req, reply) => {
             const tripData = req.body;
             let trip = new Trip();
             trip.name = tripData.name;
+            console.log(tripData);
             trip.description = tripData.description;
-            trip.start_date = tripData.start_date;
-            trip.end_date = tripData.end_date;
+            trip.start_date = tripData.trip_start_date;
+            trip.end_date = tripData.trip_end_date;
             trip.picture_url = tripData.picture_url;
+            for (var i in tripData.destinations) {
+                var item = tripData.destinations[i];
+                trip.destinations.push(item);
+            }
+            //trip.destinations.push(tripData.destinations);
             const savedTrip = await trip.save();
 
             user.trips.push(savedTrip);
