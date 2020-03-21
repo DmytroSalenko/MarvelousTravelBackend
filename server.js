@@ -2,10 +2,15 @@
 const mongoose = require('mongoose');
 const express = require('express'); //
 const bodyParser = require('body-parser');
+const passport = require('passport');
+const FacebookStrategy = require('passport-facebook').Strategy;
 
+
+
+process.env.serverAddress = 'localhost';
+process.env.serverPort = 3000;
 
 const app = express();
-const port = 3000;
 
 app.use(bodyParser.json());
 //
@@ -38,12 +43,13 @@ const path = require('path');
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         let user_id = req.params.id;
-        let images_path = path.join(__dirname, 'api/resources/image');
-        let destionation_path = path.join(images_path, user_id);
-        if (!fs.existsSync(destionation_path)) {
-            fs.mkdirSync(destionation_path)
+        // let images_path = path.join(__dirname, 'api/resources/image');
+        // let destination_path = path.join(images_path, user_id);
+        let destination_path = path.join('api/resources/image', user_id);
+        if (!fs.existsSync(destination_path)) {
+            fs.mkdirSync(destination_path)
         }
-        cb(null, destionation_path);
+        cb(null, destination_path);
     },
     filename: function (req, file, cb) {
         let extension = path.extname(file.originalname);
@@ -52,7 +58,6 @@ const storage = multer.diskStorage({
     }
 });
 const upload = multer({ storage: storage });
-
 
 const MONGO_URI = 'mongodb+srv://dsalenko:hC8fxXdbJqGQ2n1f@cluster0-xoxyn.mongodb.net/test?retryWrites=true&w=majority';
 if (!MONGO_URI) {
@@ -69,4 +74,4 @@ const set_routes = require('./api/routes');
 set_routes(app, upload, io);
 
 //app.listen(port, () => console.log(`Example app listening on port ${port}!`));
-http.listen(3000);
+http.listen(process.env.serverPort, process.env.serverAddress);

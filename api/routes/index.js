@@ -13,6 +13,8 @@ const tripController = require('../controllers/tripController');
 const imagesController = require('../controllers/imagesController');
 
 const documentation = require('./documentation/productApi');
+const passport = require('passport');
+
 
 const routes = [
 	// trips
@@ -357,6 +359,7 @@ const routes = [
 
 function set_routes(app, upload, io) {
 	const chatMessageController = require('../controllers/chatMessageController');
+
 	// trips
 	app.get('/api/user/trips/:id', tripController.getUserTrips);
 	app.post('/api/trips', tripController.createTrip);
@@ -406,11 +409,13 @@ function set_routes(app, upload, io) {
 	// authentication
 	app.post('/api/check_email', authController.checkEmailAvailability);
 	app.post('/api/sign', authController.signIn);
+	app.post('/api/auth/facebook/:access_token', authController.facebookAuthentication);
 
 	// images
 	app.post('/api/upload/icon/:id', upload.single("file"), imagesController.uploadProfileIcon);
 	app.get('/api/users/icon/:id', imagesController.getProfileIcon);
 	app.get('/api/users/mini/icon/:id', imagesController.getProfileMiniIcon);
+	app.get('/api/resources/image/:user_id/:image_name', imagesController.getImage)
 }
 
 module.exports = set_routes;

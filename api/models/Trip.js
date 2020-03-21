@@ -8,10 +8,11 @@ const TripSchema = new mongoose.Schema({
     trip_start_date: String,
     trip_end_date: String,
     picture_url: String,
+    creator: {type: mongoose.Schema.Types.ObjectId, ref:'Users'},
     destinations: [{
         city: CityModel.schema, start_date: String, end_date: String
     }],
-    users: {type: mongoose.Schema.Types.ObjectId, ref:'Users'}
+    participants: [{type: mongoose.Schema.Types.ObjectId, ref:'Users'}]
 });
 
 module.exports = mongoose.model('Trips', TripSchema);

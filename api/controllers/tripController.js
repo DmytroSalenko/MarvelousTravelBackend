@@ -9,23 +9,23 @@ const Chat = require('../models/Chat');
 // Create a trip
 exports.createTrip = async (req, reply) => {
     try {
-        const user_id = req.body.userId;
+        const user_id = req.body.creator;
         const user = await User.findById(user_id);
         if (user.length === null){
             reply.status(404).send({message: 'User was not found'})
         }else {
             const tripData = req.body;
-            let trip = new Trip();
-            trip.name = tripData.name;
+            let trip = new Trip(tripData);
+            // trip.name = tripData.name;
             console.log(tripData);
-            trip.description = tripData.description;
-            trip.start_date = tripData.trip_start_date;
-            trip.end_date = tripData.trip_end_date;
-            trip.picture_url = tripData.picture_url;
-            for (var i in tripData.destinations) {
-                var item = tripData.destinations[i];
-                trip.destinations.push(item);
-            }
+            // trip.description = tripData.description;
+            // trip.start_date = tripData.trip_start_date;
+            // trip.end_date = tripData.trip_end_date;
+            // trip.picture_url = tripData.picture_url;
+            // for (var i in tripData.destinations) {
+            //     var item = tripData.destinations[i];
+            //     trip.destinations.push(item);
+            // }
             //trip.destinations.push(tripData.destinations);
             const savedTrip = await trip.save();
 
@@ -92,7 +92,7 @@ exports.updateTrip = async (req, reply) => {
 exports.getSingleTrip = async (req, reply) => {
     try {
         const id = req.params.tripId;
-        const trip = await Trip.findById(id);
+        const trip = await Trip.findById(id).populate('creator');
         console.log(trip, "this is my trip");
         reply.send(trip);
     } catch (err) {
@@ -103,7 +103,7 @@ exports.getSingleTrip = async (req, reply) => {
 // Get all trips
 exports.getTrips = async (req, reply) => {
     try {
-        const trips = await Trip.find();
+        const trips = await Trip.find().populate('creator').populate('participants');
         reply.send(trips);
     } catch (err) {
         throw boom.boomify(err);
@@ -114,7 +114,7 @@ exports.getTrips = async (req, reply) => {
 exports.getUserTrips = async (req, reply) => {
     try {
         const id = req.params.id;
-        const trips = await User.findById(id).populate('trips');
+        const trips = await User.findById(id).populate('trips').populate('participants');
         reply.send(trips);
     } catch (err) {
         throw boom.boomify(err);
