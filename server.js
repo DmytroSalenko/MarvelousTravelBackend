@@ -6,7 +6,6 @@ const passport = require('passport');
 const FacebookStrategy = require('passport-facebook').Strategy;
 
 
-
 process.env.serverAddress = 'localhost';
 process.env.serverPort = 3000;
 

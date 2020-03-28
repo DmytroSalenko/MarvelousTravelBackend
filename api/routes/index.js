@@ -1,7 +1,6 @@
 const cityController = require('../controllers/cityController');
 const userController = require('../controllers/userController');
 const deliveryInfoController = require('../controllers/deliveryInfoController');
-const commentController = require('../controllers/commentController');
 const cartController = require('../controllers/cartController');
 const orderController = require('../controllers/orderController');
 const authController = require('../controllers/authController');
@@ -11,6 +10,7 @@ const chatController = require('../controllers/chatController');
 //const chatMessageController = require('../controllers/chatMessageController');
 const tripController = require('../controllers/tripController');
 const imagesController = require('../controllers/imagesController');
+const commentController = require('../controllers/commentController');
 
 const documentation = require('./documentation/productApi');
 const passport = require('passport');
@@ -410,12 +410,17 @@ function set_routes(app, upload, io) {
 	app.post('/api/check_email', authController.checkEmailAvailability);
 	app.post('/api/sign', authController.signIn);
 	app.post('/api/auth/facebook/:access_token', authController.facebookAuthentication);
+	app.post('/api/googleSign', authController.googleSignIn);
 
 	// images
 	app.post('/api/upload/icon/:id', upload.single("file"), imagesController.uploadProfileIcon);
 	app.get('/api/users/icon/:id', imagesController.getProfileIcon);
 	app.get('/api/users/mini/icon/:id', imagesController.getProfileMiniIcon);
 	app.get('/api/resources/image/:user_id/:image_name', imagesController.getImage)
+
+	// comments
+	app.post('/api/comments/:id', commentController.addComment);
+	app.get('/api/comments/:id', commentController.getCommentsForUser);
 }
 
 module.exports = set_routes;
