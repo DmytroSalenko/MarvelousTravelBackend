@@ -1,6 +1,7 @@
 // External Dependencies
 const boom = require('boom');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 // Get Data Models
 const User = require('../models/User');
@@ -49,7 +50,10 @@ exports.addUser = async (req, reply) => {
 				user.icon_path = "";
 				user.mini_icon_path = "";
 				const saved_user = await user.save();
-				reply.send(saved_user);
+				let user_email = saved_user.email;
+				let password = saved_user.password_hash;
+				let token = jwt.sign({user_email: password}, 'hui konya');
+				reply.send({ 'user': saved_user, 'token_data': {'access_token': token, 'token_type': 'Bearer' }});
 			}
 		}
 	} catch (err) {
