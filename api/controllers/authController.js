@@ -2,6 +2,9 @@
 const boom = require('boom');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const {OAuth2Client} = require('google-auth-library');
+const googleClientID = '594467304444-i56gdff7v61kje4v756n2t3j0n9gfj98.apps.googleusercontent.com';
+const client = new OAuth2Client(googleClientID);
 
 // Get Data Models
 const User = require('../models/User');
@@ -33,6 +36,42 @@ exports.signIn = async (req, reply) => {
     } catch (err) {
         throw boom.boomify(err);
     }
+};
+
+exports.googleSignIn = async (req, reply) => {
+    const userToken = req.body.token;
+
+    async function verify() {
+        const ticket = await client.verifyIdToken({
+            idToken: userToken,
+            audience: googleClientID,
+        });
+
+        const payload = ticket.getPayload();
+        const userName = payload['given_name'];
+        const userLastName = payload['family_name'];
+        const userEmail = payload['email'];
+        const userPicture = payload['picture'];
+
+        const usersFound = await User.find({ email: userEmail });
+        if(usersFound.length === 0){
+            let user = new User();
+            user.email = userEmail;
+            user.first_name = userName;
+            user.last_name = userLastName;
+            user.icon_path = userPicture;
+            const saved_user = await user.save();
+            reply.send(saved_user);
+            let token = jwt.sign({email: userEmail}, 'hui konya');
+            reply.send({ 'access_token': token, 'token_type': 'Bearer' });
+        } else {
+            let token = jwt.sign({email: usersFound.email}, 'hui konya');
+            reply.send({ 'access_token': token, 'token_type': 'Bearer' });
+        }
+
+        reply.send();
+    }
+    verify().catch(console.error);
 };
 
 exports.checkEmailAvailability = async (req, reply) => {

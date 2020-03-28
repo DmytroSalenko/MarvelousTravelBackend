@@ -20,6 +20,9 @@ const UserSchema = new mongoose.Schema({
 	],
 	chats: [
 		{type: mongoose.Schema.Types.ObjectId, ref: 'Chats'}
+	],
+	comments: [
+		{type: mongoose.Schema.Types.ObjectId, ref: 'Comments'}
 	]
 });
 

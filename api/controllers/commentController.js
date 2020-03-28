@@ -4,20 +4,46 @@ const boom = require('boom');
 // Get Data Models
 const Comment = require('../models/Comment');
 const Order = require('../models/Order');
-const DeliveryInfo = require('../models/DeliveryInfo');
+//const DeliveryInfo = require('../models/DeliveryInfo');
 const User = require('../models/User');
 
 // Get all comments
-exports.getComments = async (req, reply) => {
+exports.getCommentsForUser = async (req, reply) => {
 	try {
-		const comments = await Comment.find();
-		return comments.sort(function(element) {
-			return new Date(element.date)
-		}).reverse();
+		const userId = req.params.id;
+		const comments = await User.findById(userId).populate('comments');
+		reply.send(comments);
 	} catch (err) {
 		throw boom.boomify(err);
 	}
 };
+
+exports.addComment = async (req, reply) => {
+	try {
+		// user who receives comment
+		const user_id = req.params.id;
+
+		const comment_owner_id= req.body.userId;
+		const user_name = req.body.userName;
+		const date = req.body.date;
+		const description = req.body.description;
+
+		let comment = Comment();
+		comment.user_id = comment_owner_id;
+		comment.userName = user_name;
+		comment.date = date;
+		comment.description = description;
+
+		const user = await User.findById(user_id);
+		user.comments.push(comment);
+		await user.save();
+		reply.send(comment);
+	} catch (err) {
+		throw boom.boomify(err);
+	}
+};
+
+
 
 // Get single comment by ID
 exports.getSingleComment = async (req, reply) => {
@@ -42,38 +68,38 @@ exports.getCommentsByProductId = async (req, reply) => {
 };
 
 // Add a new comment
-exports.addComment = async (req, reply) => {
-	try {
-		const user_id = req.user;
-		const product_id = req.body.productId;
-		//TODO uncomment this when frontend is ready
-
-		// const ordersCreated = await Order.find({'user_id': user_id, 'orderItems.product._id': product_id});
-		// if (ordersCreated.length === 0) {
-		// 	reply.status(404).send({message: "You have to purchase this item first"});
-		// } else {
-		// 	let comment = new Comment(req.body);
-		// 	comment.userId = user_id;
-		// 	return comment.save();
-		// }
-		const user = await User.findById(user_id);
-		const deliveryInfo = await DeliveryInfo.findById(user.deliveryInfoId);
-		const userName = deliveryInfo.userName;
-
-		const commentData = req.body;
-		let comment = new Comment();
-		comment.userId = user_id;
-		comment.userName = userName;
-		comment.productId = commentData.productId;
-		comment.rating = commentData.rating;
-		comment.description = commentData.description;
-		comment.date = commentData.date;
-		const savedComment = await comment.save();
-		return JSON.stringify(savedComment);
-	} catch (err) {
-		throw boom.boomify(err);
-	}
-};
+// exports.addComment = async (req, reply) => {
+// 	try {
+// 		const user_id = req.user;
+// 		const product_id = req.body.productId;
+// 		//TODO uncomment this when frontend is ready
+//
+// 		// const ordersCreated = await Order.find({'user_id': user_id, 'orderItems.product._id': product_id});
+// 		// if (ordersCreated.length === 0) {
+// 		// 	reply.status(404).send({message: "You have to purchase this item first"});
+// 		// } else {
+// 		// 	let comment = new Comment(req.body);
+// 		// 	comment.userId = user_id;
+// 		// 	return comment.save();
+// 		// }
+// 		const user = await User.findById(user_id);
+// 		const deliveryInfo = await DeliveryInfo.findById(user.deliveryInfoId);
+// 		const userName = deliveryInfo.userName;
+//
+// 		const commentData = req.body;
+// 		let comment = new Comment();
+// 		comment.userId = user_id;
+// 		comment.userName = userName;
+// 		comment.productId = commentData.productId;
+// 		comment.rating = commentData.rating;
+// 		comment.description = commentData.description;
+// 		comment.date = commentData.date;
+// 		const savedComment = await comment.save();
+// 		return JSON.stringify(savedComment);
+// 	} catch (err) {
+// 		throw boom.boomify(err);
+// 	}
+// };
 
 // Update an existing comment
 exports.updateComment = async (req, reply) => {

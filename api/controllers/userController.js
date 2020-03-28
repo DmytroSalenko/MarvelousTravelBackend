@@ -33,6 +33,8 @@ exports.addUser = async (req, reply) => {
 		let email = req.body.email;
 		let first_name = req.body.first_name;
 		let last_name = req.body.last_name;
+		let about = req.body.about;
+		let interests = req.body.interests;
 		let regex = /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/;
 		if (!email.match(regex)) {
 			reply.status(403).send({message: "Email is invalid"});
@@ -46,6 +48,8 @@ exports.addUser = async (req, reply) => {
 				user.password_hash = bcrypt.hashSync(req.body.password, 2);
 				user.first_name = first_name;
 				user.last_name = last_name;
+				user.about = about;
+				user.interests = interests;
 				const saved_user = await user.save();
 				reply.send(saved_user);
 			}
@@ -66,6 +70,7 @@ exports.updateUser = async (req, reply) => {
 	} catch (err) {
 		throw boom.boomify(err);
 	}
+
 };
 
 // Delete a user
