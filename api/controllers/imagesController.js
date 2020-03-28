@@ -42,7 +42,8 @@ exports.getProfileIcon = async (req, reply) => {
     if (user) {
         let profile_icon_path = user.icon_path;
         if (profile_icon_path != null) {
-            reply.sendFile(path.resolve(profile_icon_path));
+            let real_icon_path = profile_icon_path.split(path.sep).slice(1);
+            reply.sendFile(path.resolve(...real_icon_path));
         } else {
             reply.status(404).send({message: 'No icon found'});
         }
@@ -59,7 +60,8 @@ exports.getProfileMiniIcon = async (req, reply) => {
     if (user) {
         let profile_mini_icon_path = user.mini_icon_path;
         if (profile_mini_icon_path != null) {
-            reply.sendFile(path.resolve(profile_mini_icon_path));
+            let real_icon_path = profile_mini_icon_path.split(path.sep).slice(1);
+            reply.sendFile(path.resolve(...real_icon_path));
         } else {
             reply.status(404).send({message: 'No icon found'});
         }
