@@ -34,6 +34,8 @@ exports.addComment = async (req, reply) => {
 		comment.date = date;
 		comment.description = description;
 
+		await comment.save();
+
 		const user = await User.findById(user_id);
 		user.comments.push(comment);
 		await user.save();
