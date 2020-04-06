@@ -43,8 +43,9 @@ exports.createTrip = async (req, reply) => {
             user.chats.push(chat);
             await user.save();
 
+            const tripForReturn = await Trip.findById(trip.id).populate('creator');
             // return JSON.stringify(savedTrip) + JSON.stringify(savedChat);
-            reply.send(JSON.stringify(savedTrip));
+            reply.send(tripForReturn);
         }
 
     } catch (err) {
