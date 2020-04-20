@@ -92,7 +92,7 @@ exports.updateTrip = async (req, reply) => {
 exports.getSingleTrip = async (req, reply) => {
     try {
         const id = req.params.tripId;
-        const trip = await Trip.findById(id).populate('creator');
+        const trip = await Trip.findById(id).populate('creator').populate('participants');
         console.log(trip, "this is my trip");
         reply.send(trip);
     } catch (err) {

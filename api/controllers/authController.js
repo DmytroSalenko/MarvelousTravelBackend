@@ -6,6 +6,11 @@ const FB = require('fb');
 const {OAuth2Client} = require('google-auth-library');
 const googleClientID = '594467304444-i56gdff7v61kje4v756n2t3j0n9gfj98.apps.googleusercontent.com';
 const client = new OAuth2Client(googleClientID);
+const fs = require('fs');
+const download = require('image-downloader')
+const path = require('path');
+
+
 
 // Get Data Models
 const User = require('../models/User');
@@ -29,7 +34,7 @@ exports.signIn = async (req, reply) => {
 
         if (isMatch) {
             let token = jwt.sign({email: password}, 'hui konya');
-            reply.send({ 'access_token': token, 'token_type': 'Bearer' });
+            reply.send({ 'user': usersFound[0], 'token_data': {'access_token': token, 'token_type': 'Bearer' }});
         } else {
             reply.status(400).send({message: 'Invalid password'});
         }
@@ -62,12 +67,25 @@ exports.googleSignIn = async (req, reply) => {
             user.last_name = userLastName;
             user.icon_path = userPicture;
             const saved_user = await user.save();
-            reply.send(saved_user);
+            let user_id = saved_user.id;
+            let image_url = saved_user.icon_path;
+            let icon_path = path.resolve('api/resources/image', user_id);
+            if (!fs.existsSync(icon_path)){
+                fs.mkdirSync(icon_path);
+            }
+            let updated_path = path.join(icon_path, 'profilepic.jpg');
+            const options = {url: image_url, dest: updated_path};
+            var image_url_to_save = await downloadIMG(options);
+
+            image_url_to_save = process.env.serverAddress + ':' + process.env.serverPort + '/' + path.join(...image_url_to_save.split(path.sep).slice(-5));
+
+            saved_user.icon_path = image_url_to_save;
+            const updated_user = await User.findByIdAndUpdate(saved_user.id, saved_user, { new: true });
             let token = jwt.sign({email: userEmail}, 'hui konya');
-            reply.send({ 'access_token': token, 'token_type': 'Bearer' });
+            reply.send({ 'user': updated_user, 'token_data': {'access_token': token, 'token_type': 'Bearer' }});
         } else {
             let token = jwt.sign({email: usersFound.email}, 'hui konya');
-            reply.send({ 'access_token': token, 'token_type': 'Bearer' });
+            reply.send({ 'user': usersFound[0], 'token_data': {'access_token': token, 'token_type': 'Bearer' }});
         }
 
         reply.send();
@@ -115,10 +133,25 @@ exports.facebookAuthentication = async (req, reply) => {
                             user.mini_icon_path = req.body.picture_small.data.url;
 
                             const saved_user = await user.save();
+                            let user_id = saved_user.id;
+                            let image_url = saved_user.icon_path;
+                            let icon_path = path.resolve('api/resources/image', user_id);
+                            if (!fs.existsSync(icon_path)){
+                                fs.mkdirSync(icon_path);
+                            }
+                            let updated_path = path.join(icon_path, 'profilepic.jpg');
+                            const options = {url: image_url, dest: updated_path};
+                            var image_url_to_save = await downloadIMG(options);
+
+                            image_url_to_save = process.env.serverAddress + ':' + process.env.serverPort + '/' + path.join(...image_url_to_save.split(path.sep).slice(-5));
+
+                            saved_user.icon_path = image_url_to_save;
+                            const updated_user = await User.findByIdAndUpdate(saved_user.id, saved_user, { new: true });
+                            console.log(updated_user.id);
                             let user_email = user.email;
                             let password = user.password_hash;
                             let token = jwt.sign({user_email: password}, 'hui konya');
-                            reply.send({ 'user': saved_user, 'token_data': {'access_token': token, 'token_type': 'Bearer' }});
+                            reply.send({ 'user': updated_user, 'token_data': {'access_token': token, 'token_type': 'Bearer' }});
                         }
                     }
                 })
@@ -133,4 +166,13 @@ exports.authorizeRequest = async (req, reply) => {
 	}
 };
 
+async function downloadIMG(options) {
+    try {
+        const { filename, image } = await download.image(options);
+        console.log(filename);
+        return filename;// => /path/to/dest/image.jpg
+    } catch (e) {
+        console.error(e)
+    }
+}
 //TODO add logout function
