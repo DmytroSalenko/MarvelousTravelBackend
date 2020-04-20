@@ -32,3 +32,15 @@ exports.getUserChats = async (req, reply) => {
         throw boom.boomify(err);
     }
 };
+
+exports.getChatByTripId = async (req, reply) => {
+    try {
+        const tripId = req.params.id;
+        console.log(tripId);
+        const chat = await Chat.findOne({tripId: tripId});
+        reply.send(chat);
+    }catch (error) {
+        throw boom.boomify(err);
+    }
+
+};

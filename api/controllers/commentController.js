@@ -23,13 +23,13 @@ exports.addComment = async (req, reply) => {
 		// user who receives comment
 		const user_id = req.params.id;
 
-		const comment_owner_id= req.body.userId;
+		const comment_owner_id = req.body.userId;
 		const user_name = req.body.userName;
 		const date = req.body.date;
 		const description = req.body.description;
 
 		let comment = Comment();
-		comment.user_id = comment_owner_id;
+		comment.userId = comment_owner_id;
 		comment.userName = user_name;
 		comment.date = date;
 		comment.description = description;

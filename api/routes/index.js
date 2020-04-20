@@ -377,6 +377,7 @@ function set_routes(app, upload, io) {
 	});
 	app.get('/api/chats/:id', chatController.getSingleChat);
 	app.get('/api/user/chats/:id', chatController.getUserChats);
+	app.get('/api/chat/:id', chatController.getChatByTripId);
 
 	// cities
 	app.get('/api/cities', cityController.getCities);

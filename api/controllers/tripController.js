@@ -59,7 +59,6 @@ exports.deleteTrip = async (req, reply) => {
         const tripId = req.body.tripId;
         const chatId = req.body.chatId;
         const userId = req.body.userId;
-        console.log(req.body, "this is body");
         const trip = await Trip.findByIdAndDelete(tripId);
         const chat = await Chat.findByIdAndDelete(chatId);
         const user = await User.findById(userId);
@@ -67,7 +66,7 @@ exports.deleteTrip = async (req, reply) => {
         user.chats.pull(chatId);
         await user.save();
 
-        reply.send(trip + chat);
+        reply.send(trip);
     }catch (err) {
         throw boom.boomify(err);
     }
@@ -115,7 +114,7 @@ exports.getTrips = async (req, reply) => {
 exports.getUserTrips = async (req, reply) => {
     try {
         const id = req.params.id;
-        const trips = await User.findById(id).populate('trips').populate('participants');
+        const trips = await User.findById(id).populate('trips');
         reply.send(trips);
     } catch (err) {
         throw boom.boomify(err);
@@ -132,6 +131,8 @@ exports.followTrip = async (req, reply) => {
         console.log(chat, 'this is a chat');
         user.trips.push(trip);
         user.chats.push(chat);
+        trip.participants.push(user._id);
+        await trip.save();
         await user.save();
         reply.send(user);
   } catch(err) {
@@ -145,9 +146,12 @@ exports.unfollowTrip = async (req, reply) => {
         const tripId = req.body.tripId;
         const chatId = req.body.chatId;
         const user = await User.findById(userId);
+        const trip = await Trip.findById(tripId);
         console.log(user.trips);
         user.trips.pull(tripId);
         user.chats.pull(chatId);
+        trip.participants.pull(user._id);
+        await trip.save();
         await user.save();
         reply.send(user);
     }catch(err) {
