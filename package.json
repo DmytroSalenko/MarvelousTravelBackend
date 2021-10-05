@@ -17,7 +17,7 @@
     "fastify-jwt": "^1.2.1",
     "fastify-multipart": "^1.0.5",
     "fastify-session": "^3.0.0",
-    "fastify-static": "^2.5.0",
+    "fastify-static": "^4.2.4",
     "fastify-swagger": "^2.3.2",
     "fb": "^2.0.0",
     "fs": "0.0.1-security",
